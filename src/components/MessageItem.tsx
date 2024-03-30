@@ -1,3 +1,5 @@
+// https://claude.ai/chat/040cf6f7-0754-48fc-9a05-0ed0729d0ea5
+// src/components/MessageItem.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import { Message } from "ai/react";
 import { Bot, RefreshCw, Trash, User, Volume2 } from "lucide-react";
