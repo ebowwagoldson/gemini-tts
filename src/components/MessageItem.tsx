@@ -20,7 +20,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   onRemove,
 }) => {
   const isUser = message.role === 'user';
-  const utteranceRef = useRef(null);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
     if (isLastMessage && !isUser && !isLoading) {
