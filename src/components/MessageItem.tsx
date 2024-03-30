@@ -12,7 +12,7 @@ type MessageItemProps = {
   onRemove: () => void;
 };
 
-const MessageItem: React.FC<MessageItemProps> = ({
+export const MessageItem: React.FC<MessageItemProps> = ({
   message,
   isLastMessage,
   isLoading,
@@ -24,49 +24,27 @@ const MessageItem: React.FC<MessageItemProps> = ({
 
   useEffect(() => {
     if (isLastMessage && !isUser && !isLoading) {
-      // Create a new SpeechSynthesisUtterance instance with the message content
       const utterance = new SpeechSynthesisUtterance(message.content);
-
-      // Set the desired language for the speech synthesis
       utterance.lang = 'en-US';
-
-      // Store the utterance instance in the utteranceRef
       utteranceRef.current = utterance;
 
-      // Get the available voices from the window.speechSynthesis.getVoices() method
       const voices = window.speechSynthesis.getVoices();
-
-      // If there are available voices
       if (voices.length > 0) {
-        // Set the first available voice to the utterance
         utterance.voice = voices[0];
-
-        // Call window.speechSynthesis.speak(utterance) to start speaking the message content
         window.speechSynthesis.speak(utterance);
       } else {
-        // If there are no available voices initially
-        // Add an event listener to the 'voiceschanged' event
         window.speechSynthesis.addEventListener('voiceschanged', () => {
-          // Get the available voices again when the voices are loaded
           const voices = window.speechSynthesis.getVoices();
-
-          // If there are available voices now
           if (voices.length > 0) {
-            // Set the first available voice to the utterance
             utterance.voice = voices[0];
-
-            // Call window.speechSynthesis.speak(utterance) to start speaking the message content
             window.speechSynthesis.speak(utterance);
           }
         });
       }
     }
 
-    // Cleanup function of the useEffect hook
     return () => {
-      // If the utteranceRef has a value
       if (utteranceRef.current) {
-        // Cancel any ongoing speech synthesis
         window.speechSynthesis.cancel();
       }
     };
@@ -111,6 +89,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
       </div>
     </div>
   );
+};
 };
 
 export default MessageItem;
