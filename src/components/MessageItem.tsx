@@ -90,6 +90,3 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     </div>
   );
 };
-};
-
-export default MessageItem;
