@@ -36,10 +36,10 @@ export const ControlProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const [safetySettings, setSafetySettings] = useState<SafetySettings>({
-    harassment: 2,
-    hateSpeech: 2,
-    sexuallyExplicit: 2,
-    dangerousContent: 2,
+    harassment: 0,
+    hateSpeech: 0,
+    sexuallyExplicit: 0,
+    dangerousContent: 0,
   });
 
   const [mediaDataList, setMediaDataList] = useState<MediaData[]>([]);

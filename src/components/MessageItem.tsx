@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Message } from "ai/react";
-import { Bot, RefreshCw, Trash, User } from "lucide-react";
+import { Bot, RefreshCw, Trash, User, Volume2 } from "lucide-react";
 import { MarkdownViewer } from "./markdown-viewer/MarkdownViewer";
 import { Button } from "./ui/button";
 
@@ -20,35 +20,41 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   onRemove,
 }) => {
   const isUser = message.role === 'user';
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-  useEffect(() => {
-    if (isLastMessage && !isUser && !isLoading) {
+  const handleSpeak = () => {
+    if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(message.content);
       utterance.lang = 'en-US';
       utteranceRef.current = utterance;
 
-      const voices = window.speechSynthesis.getVoices();
-      if (voices.length > 0) {
-        utterance.voice = voices[0];
-        window.speechSynthesis.speak(utterance);
-      } else {
-        window.speechSynthesis.addEventListener('voiceschanged', () => {
-          const voices = window.speechSynthesis.getVoices();
-          if (voices.length > 0) {
-            utterance.voice = voices[0];
-            window.speechSynthesis.speak(utterance);
-          }
-        });
-      }
-    }
+      utterance.onstart = () => {
+        setIsSpeaking(true);
+      };
 
+      utterance.onend = () => {
+        setIsSpeaking(false);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  const handleStopSpeaking = () => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
+  };
+
+  useEffect(() => {
     return () => {
       if (utteranceRef.current) {
         window.speechSynthesis.cancel();
       }
     };
-  }, [isLastMessage, isUser, isLoading, message.content]);
+  }, []);
 
   return (
     <div className="flex">
@@ -63,6 +69,16 @@ export const MessageItem: React.FC<MessageItemProps> = ({
             <div>{isUser ? "You" : "Gemini Pro"}</div>
           </div>
           <div className={`space-x-6`}>
+            {!isLoading && isLastMessage && !isUser && (
+              <Button
+                variant="icon"
+                type="button"
+                size="sm"
+                onClick={isSpeaking ? handleStopSpeaking : handleSpeak}
+              >
+                <Volume2 className={`w-4 h-4 ${isSpeaking ? 'text-green-500' : ''}`} />
+              </Button>
+            )}
             {!isLoading && isLastMessage && isUser && (
               <Button
                 variant="icon"
