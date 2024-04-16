@@ -5,7 +5,7 @@ import { createContext, useState, useContext, ReactNode } from "react";
 import { MediaData, SafetySettings, GeneralSettings } from "@/types";
 
 interface ControlContextState {
-  selectedModel: "gemini-pro" | "gemini-pro-vision";
+  selectedModel: "gemini-pro" | "gemini-pro-vision" | "gemini-pro-1.5";
   mediaDataList: MediaData[];
   handleMediaUpload: (data: string, mimeType: string, index: number) => void;
   removeMediaData: (index: number) => void;
@@ -15,7 +15,7 @@ interface ControlContextState {
     newValue: number
   ) => void;
   safetySettings: SafetySettings;
-  handleModelChange: (model: "gemini-pro" | "gemini-pro-vision") => void;
+  handleModelChange: (model: "gemini-pro" | "gemini-pro-vision" |  "gemini-pro-1.5") => void;
   handleSafetyChange: (type: keyof SafetySettings, newValue: number[]) => void;
 }
 
@@ -25,12 +25,12 @@ export const ControlContext = createContext<ControlContextState | undefined>(
 
 export const ControlProvider = ({ children }: { children: ReactNode }) => {
   const [selectedModel, setSelectedModel] = useState<
-    "gemini-pro" | "gemini-pro-vision"
-  >("gemini-pro");
+    "gemini-pro" | "gemini-pro-vision" |  "gemini-pro-1.5"
+  >("gemini-pro-1.5");
 
   const [generalSettings, setGeneralSettings] = useState<GeneralSettings>({
     temperature: 0.2,
-    maxLength: 2048,
+    maxLength: 4096,
     topP: 0.8,
     topK: 40,
   });
@@ -44,7 +44,7 @@ export const ControlProvider = ({ children }: { children: ReactNode }) => {
 
   const [mediaDataList, setMediaDataList] = useState<MediaData[]>([]);
 
-  const handleModelChange = (model: "gemini-pro" | "gemini-pro-vision") => {
+  const handleModelChange = (model: "gemini-pro" | "gemini-pro-vision" | "gemini-pro-1.5") => {
     setSelectedModel(model);
   };
 
