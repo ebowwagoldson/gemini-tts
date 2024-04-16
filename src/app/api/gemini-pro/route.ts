@@ -81,7 +81,7 @@ export async function POST(req: Request) {
 
   const geminiStream = await genAI
     .getGenerativeModel({
-      model: "gemini-pro",
+      model: "gemini-pro-1.5",
       safetySettings: mappedSafetySettings,
       generationConfig: {
         //   candidateCount: 0,
