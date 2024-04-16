@@ -74,7 +74,7 @@ export async function POST(req: Request) {
 
   const tokens = await genAI
     .getGenerativeModel({
-      model: "gemini-pro",
+      model: "gemini-pro-1.5",
     })
     .countTokens(reqContent);
   console.log("count tokens ------", tokens);
